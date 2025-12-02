@@ -3,6 +3,12 @@
 ## 简介 (Introduction)
 
 本项目专注于旋转机械的智能故障诊断，通过将原始振动信号转换为**时频图（STFT 谱图）**，并利用 **ResNet** 等深度学习模型进行分类。项目的核心亮点在于其支持**多源数据处理（CWRU `.mat` 和工业级 `.tdms`）**，以及在目标领域（Target Domain）引入 **LoRA (Low-Rank Adaptation)** 参数高效微调技术，以解决迁移学习或领域自适应中的数据稀疏问题。
+<img width="1000" height="350" alt="F0043_0002_CAM_True_F4_Pred_F4_Combined" src="https://github.com/user-attachments/assets/25ac9a3a-5351-4875-beee-0383dd9b6266" />
+<img width="650" height="350" alt="F0043_0002_LIME_True_F4_Pred_F4_Combined" src="https://github.com/user-attachments/assets/b2c58321-779d-4940-b3a1-4c64661131f3" />
+<img width="800" height="700" alt="seresnext50_32x4d_confusion_matrix" src="https://github.com/user-attachments/assets/00d7dfd9-0335-4864-bebb-81d3a1f4045d" />
+<img width="1800" height="500" alt="seresnext50_32x4d_metrics_curves" src="https://github.com/user-attachments/assets/49d7d963-bcf7-4fa7-a1fd-5d8c28c6feb5" />
+<img width="1500" height="1200" alt="seresnext50_32x4d_tsne_visualization" src="https://github.com/user-attachments/assets/988e8c16-f12b-409d-b87a-15d6afa87b31" />
+
 
 ## 📁 文件结构与功能
 
