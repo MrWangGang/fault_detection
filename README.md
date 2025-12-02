@@ -49,12 +49,35 @@
 * **特征可视化**：支持 **t-SNE** 降维可视化，用于观察模型提取的特征在二维空间中的聚类效果。
 * **可解释性分析**：集成 **Grad-CAM** 和 **LIME**，能够定位模型在 STFT 图像中关注的关键区域，增强诊断结果的可信度。
 
-<img width="1000" height="350" alt="F0043_0002_CAM_True_F4_Pred_F4_Combined" src="https://github.com/user-attachments/assets/ead0ce01-3397-4386-9942-083d3a268b91" />
-<img width="650" height="350" alt="F0043_0002_LIME_True_F4_Pred_F4_Combined" src="https://github.com/user-attachments/assets/836f07e1-422f-4533-8b97-0cbd3a092332" />
-<img width="800" height="700" alt="seresnext50_32x4d_confusion_matrix" src="https://github.com/user-attachments/assets/664b410d-a93f-4a4f-ac0e-e1795a036cf7" />
-<img width="1800" height="500" alt="seresnext50_32x4d_metrics_curves" src="https://github.com/user-attachments/assets/160f4aec-9ce3-4d77-a4f1-b5540c8ff25e" />
-<img width="1500" height="1200" alt="seresnext50_32x4d_tsne_visualization" src="https://github.com/user-attachments/assets/f06c4655-b5d0-45f0-a463-289b87b4a6bf" />
+## 4. 迁移学习策略与实施 (Transfer Learning Strategy)
 
+本项目采用标准的**基于预训练的迁移学习**范式，利用源领域（CWRU 或 Origin）的丰富数据训练一个强大的特征提取器，随后将其高效迁移到数据量有限的目标领域（Target Domain）进行微调和适应。
 
+### 4.1. 预训练阶段 (Pre-training Phase)
 
+**目标：** 在数据分布不同但规模充足的源域上，学习振动信号的时频特征表示。
+**实现脚本：**
+* **CWRU 预训练 (`train_cwru.py`)：** 在 CWRU 数据集（10 类别）上进行全量训练。模型学习基本的轴承故障特征。
+* **Origin 预训练 (`train_origin.py`)：** 在 Origin 数据集（5 类别）上进行全量训练。模型学习更贴近实际工业传感器的振动模式。
 
+**迁移权重：** 预训练完成后，保存的最佳模型权重将作为目标域任务的起始权重。
+
+### 4.2. 目标域适应阶段 (Target Domain Adaptation Phase)
+
+**目标：** 将预训练模型的通用知识快速、高效地适应到目标域的特定工况和故障类别上。
+**实现脚本：** `train_target.py` 脚本，它支持以下**三种**迁移模式，以应对不同规模和域差异的目标数据集：
+
+#### 模式 A：LoRA 参数高效微调 (PEFT) - 推荐
+* **策略：** 冻结 ResNet 主体权重，仅通过训练低秩矩阵 ($A$ 和 $B$) 将适配层权重增量 $\Delta W$ 添加到冻结的 $W_0$ 上。
+* **训练参数：** 极少（仅 $A, B$ 和分类头）。
+* **适用场景：** 目标域数据量极少或需要快速验证，能最大限度避免过拟合。
+
+#### 模式 B：全冻结微调 (Feature Extractor)
+* **策略：** **完全冻结** ResNet 主干网络（所有卷积层和 Batch Normalization 层），只训练最终的分类头（全连接层）。
+* **训练参数：** 极少（仅分类头）。
+* **适用场景：** 目标域数据量极少，且目标域和源域的数据分布差异非常小。
+
+#### 模式 C：半冻结微调 (Partial Fine-tuning)
+* **策略：** 冻结模型早期的浅层特征提取层（如 ResNet 的 `layer1`），解冻并训练模型后期的深层特征层（如 `layer3`、`layer4`）和分类头。
+* **训练参数：** 中等（模型深层和分类头）。
+* **适用场景：** 目标域与源域数据有一定差异，且目标域数据量适中，需要中等到深层的特征适应。
