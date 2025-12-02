@@ -1,5 +1,5 @@
 # ⚙️ 深度迁移学习驱动的工业振动故障诊断：STFT-CNN 与 LoRA 高效微调
-
+因数据集涉及到隐私,如需要请联系wanggang userbean@outlook.com
 ## 简介 (Introduction)
 
 本项目专注于旋转机械的智能故障诊断，通过将原始振动信号转换为**时频图（STFT 谱图）**，并利用 **ResNet** 等深度学习模型进行分类。项目的核心亮点在于其支持**多源数据处理（CWRU `.mat` 和工业级 `.tdms`）**，以及在目标领域（Target Domain）引入 **LoRA (Low-Rank Adaptation)** 参数高效微调技术，以解决迁移学习或领域自适应中的数据稀疏问题。
