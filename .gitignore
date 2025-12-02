@@ -1,0 +1,36 @@
+# ========================
+# 1. IntelliJ IDEA 文件和目录
+# ========================
+
+# 忽略整个项目配置目录
+.idea/
+
+# 历史记录、本地缓存文件
+*.iml
+*.ipr
+*.iws
+
+# 操作系统特定文件
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# ========================
+# 2. 常见编译和日志文件
+# ========================
+
+# Java / Maven / Gradle
+/target/
+build/
+*.class
+
+# Python / Virtual Environments
+venv/
+.venv/
+__pycache__/
+*.pyc
+/dist/
+
+# 日志和临时文件
+*.log
+temp/
+tmp/
