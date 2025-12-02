@@ -1,4 +1,4 @@
-# ⚙️ 基于时频图与 LoRA 技术的旋转机械故障诊断项目 (TD-LoRA-FD)
+# ⚙️ 深度迁移学习驱动的工业振动故障诊断：STFT-CNN 与 LoRA 高效微调
 
 ## 简介 (Introduction)
 
